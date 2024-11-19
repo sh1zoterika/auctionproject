@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Жалобы на пользователей</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+        }
+        h1 {
+            font-size: 28px;
+            color: #333333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 20px;
+            text-align: left;
+            border-bottom: 1px solid #dddddd;
+            font-size: 18px;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f8f8f8;
+            color: #333333;
+        }
+        td {
+            background-color: #ffffff;
+        }
+        .actions {
+            display: flex;
+            gap: 15px;
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #ffffff;
+        }
+        .approve-button {
+            background-color: #4CAF50;
+        }
+        .reject-button {
+            background-color: #FF4C4C;
+        }
+        .back-button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .image-cell img {
+            max-width: 600px;
+            max-height: 600px;
+            margin-right: 15px;
+            border-radius: 6px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Жалобы на пользователей</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Подал жалобу</th>
+                    <th>Нарушитель</th>
+                    <th>Причина</th>
+                    <th>Описание</th>
+                    <th>Медиа-доказательства</th>
+                    <th>Жалоба создана</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in user_reports %}
+                <tr>
+                    <td>{{ report.reported_by.username }}</td>
+                    <td>{{ report.reported_on.username }}</td>
+                    <td>{{ report.reason }}</td>
+                    <td>{{ report.description }}</td>
+                    <td class="image-cell">
+                        {% for image in report.images.all %}
+                            <img src="{{ image.image.url }}" alt="Image for report {{ report.id }}">
+                        {% empty %}
+                            Нет изображений
+                        {% endfor %}
+                    </td>
+                    <td>{{ report.created_at }}</td>
+                    <td>
+                        <div class="actions">
+                            <form action="{% url 'warn_user' report.reported_on.id report.id report.report_type %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="reject-button">Выдать страйк</button>
+                            </form>
+                            <form action="{% url 'ban_user' report.reported_on.id report.id report.report_type %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="reject-button">Забанить</button>
+                            </form>
+                            <form action="{% url 'decline_report' report.id report.report_type %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="reject-button">Отклонить жалобу</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; color: #888888; font-size: 18px;">Нет нерассмотренных жалоб на пользователей.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{% url 'user_dashboard' %}" class="back-button">Назад</a>
+    </div>
+</body>
+</html>

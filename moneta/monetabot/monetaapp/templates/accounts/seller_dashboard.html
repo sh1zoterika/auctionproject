@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет продавца</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f7f6;
+        }
+        .container {
+            width: 400px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            background-color: #fff;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .info {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 3px;
+            margin-top: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .logout {
+            background-color: #dc3545;
+        }
+        .logout:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Личный кабинет продавца</h2>
+        <p class="info">Добро пожаловать, {{ user.username }}!</p>
+        <p class="info">Ваш баланс: {{ user.balance }} ₽(На удержании {{ user.hold_balance }} ₽)</p>
+
+        <a href="edit_seller" class="btn">Личные данные</a>
+        <a href="create_auction" class="btn">Создать аукцион</a>
+        <a href="active_auctions" class="btn">Мои активные аукционы</a>
+        <a href="repeat_auction" class="btn">Повторить аукцион</a>
+        <a href="auction_history" class="btn">История аукционов</a>
+        <a href="customers" class="btn">Покупатели</a>
+        <a href="create_report" class="btn">Пожаловаться</a>
+
+        <a href="{% url 'logout' %}" class="btn logout">Выйти</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои покупки</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 900px;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333333;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dddddd;
+        }
+        th {
+            background-color: #f8f8f8;
+            color: #333333;
+        }
+        td {
+            background-color: #ffffff;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #ffffff;
+        }
+        .approve-button {
+            background-color: #4CAF50;
+        }
+        .reject-button {
+            background-color: #FF4C4C;
+        }
+        .back-button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Мои покупки</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Продавец</th>
+                    <th>Финальная цена</th>
+                    <th>Описание</th>
+                    <th>Дата окончания</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for auction in auctions %}
+                <tr>
+                    <td>{{ auction.product_name }}</td>
+                    <td>{{ auction.seller.username }}</td>
+                    <td>{{ auction.final_price }}</td>
+                    <td>{{ auction.description }}</td>
+                    <td>{{ auction.end_time }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: #888888;">Нет ожидающих аукционов.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{% url 'user_dashboard' %}" class="back-button">Назад</a>
+    </div>
+</body>
+</html>

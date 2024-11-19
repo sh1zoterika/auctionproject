@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление Пользователями</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            width: 70%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #f5f5f5;
+            color: #555;
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 150px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #218838;
+        }
+        .button-back {
+            background-color: #17a2b8;
+        }
+        .button-back:hover {
+            background-color: #138496;
+        }
+        .back-button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Пользователи</h2>
+        <form method="post" action="{% url 'manage_users' %}">
+            {% csrf_token %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Роль</th>
+                        <th>Баланс</th>
+                        <th>Страйки</th>
+                        <th>Статус</th>
+                        <th>Last Time Active</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users%}
+                    <tr>
+                        <td><input type="text" name="username_{{ user.id }}" value="{{ user.username }}" readonly></td>
+                        <td>
+                            <select name="role_{{ user.id }}">
+                                <option value="User" {% if user.type == "User" %}selected{% endif %}>User</option>
+                                <option value="Support" {% if user.type == "Support" %}selected{% endif %}>Support</option>
+                                <option value="Seller" {% if user.type == "Seller" %}selected{% endif %}>Seller</option>
+                                <option value="Admin" {% if user.type == "Admin" %}selected{% endif %}>Admin</option>
+                            </select>
+                        </td>
+                        <td><input type="number" name="balance_{{ user.id }}" value="{{ user.balance }}"></td>
+                        <td><input type="number" name="warnings_{{ user.id }}" value="{{ user.warnings }}"></td>
+                        <td>
+                            <select name="status_{{ user.id }}">
+                                <option value="active" {% if user.status == "active" %}selected{% endif %}>active</option>
+                                <option value="inactive" {% if user.status == "inactive" %}selected{% endif %}>inactive</option>
+                            </select>
+                        </td>
+                        <td><input type="text" value="{{ user.last_login }}" readonly></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="button-container">
+                <button type="submit" class="button">Подтвердить</button>
+            </div>
+        </form>
+
+        <a href="{% url 'user_dashboard' %}" class="back-button">Назад</a>
+    </div>
+</body>
+</html>
